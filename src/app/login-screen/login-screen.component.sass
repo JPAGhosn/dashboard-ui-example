@@ -1,0 +1,39 @@
+:host
+    display: flex
+    flex-direction: row
+    align-items: center
+    justify-content: center
+    height: 100%
+    width: 100%
+
+:host ::ng-deep
+    --mdc-circular-progress-active-indicator-color: var(--on-primary)
+
+.submit-button
+    height: 50px
+    margin-top: 5px
+    transition: width 200ms ease-in-out
+    width: 100%
+
+.authbox
+    display: flex
+    flex-direction: column
+    align-items: stretch
+    gap: 10px
+    max-width: 400px
+    width: 90%
+
+.logo
+    margin-bottom: 15px
+
+.error
+    text-align: center
+    color: var(--error)
+
+.loader
+    width: 30px !important
+    height: 30px !important
+
+.submit-button.is-loading
+    width: 75px
+    align-self: center

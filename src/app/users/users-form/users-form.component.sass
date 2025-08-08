@@ -1,0 +1,17 @@
+@import "extendables"
+
+:host
+    display: flex
+    flex-direction: column
+    padding: 0 var(--screen-padding)
+
+form
+    display: flex
+    flex-direction: column
+    align-items: stretch
+    gap: 10px
+    width: 100%
+    max-width: 500px
+
+.title
+    @extend .screen-title

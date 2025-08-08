@@ -1,0 +1,149 @@
+@if(initialized()) {
+<app-count-display-card
+  class="total-corporate-users"
+  title="Total Corporate Users"
+  [value]="totalCorporateUsersCount()"
+>
+  <ng-template appIcon>
+    <app-building-icon></app-building-icon>
+  </ng-template>
+</app-count-display-card>
+
+<app-count-display-card
+  class="total-bank-users"
+  title="Total Bank Users"
+  [value]="totalBankUsersCount()"
+>
+  <ng-template appIcon>
+    <app-house-icon></app-house-icon>
+  </ng-template>
+</app-count-display-card>
+
+<app-count-display-card
+  class="corporate-online-users"
+  title="Corporate Online Users"
+  [value]="corporateOnlineUsers()"
+>
+  <ng-template appIcon>
+    <app-laptop-icon></app-laptop-icon>
+  </ng-template>
+</app-count-display-card>
+
+<app-count-display-card
+  class="bank-online-users"
+  title="Bank Online Users"
+  [value]="bankOnlineUsers()"
+>
+  <ng-template appIcon>
+    <app-wifi-icon></app-wifi-icon>
+  </ng-template>
+</app-count-display-card>
+
+<app-section class="total-companies" title="Total Companies">
+  <ng-template appActionIcon>
+    <app-building-icon
+      class="total-companies-action-icon"
+      (click)="onTotalCompaniesActionIconClick()"
+    ></app-building-icon>
+  </ng-template>
+  <div body>
+    <app-card label="Total" class="total-card">
+      @if(totalCompaniesCount() !== null) {
+      <span class="count">{{ totalCompaniesCount() }}</span>
+      } @else {
+      <div class="no-value-bar"></div>
+      }
+
+      <ng-template appDescriptiveIcon>
+        <app-sum-icon></app-sum-icon>
+      </ng-template>
+    </app-card>
+    <app-card label="Pending" class="pending-card">
+      @if(pendingCompaniesCount() !== null) {
+      <span class="count">{{ pendingCompaniesCount() }}</span>
+      } @else {
+      <div class="no-value-bar"></div>
+      }
+    </app-card>
+    <app-card label="Approved" class="approved-card">
+      @if(pendingCompaniesCount() !== null) {
+      <span class="count">{{ pendingCompaniesCount() }}</span>
+      } @else {
+      <div class="no-value-bar"></div>
+      }
+    </app-card>
+  </div>
+</app-section>
+<app-section class="total-accounts" title="Total Accounts">
+  <ng-template appActionIcon>
+    <app-storage-icon class="total-accounts-action-icon"></app-storage-icon>
+  </ng-template>
+  <div body>
+    <app-card label="Total" class="total-card">
+      @if(totalAccountsCount() !== null) {
+      <span class="count">{{ totalAccountsCount() }}</span>
+      } @else {
+      <div class="no-value-bar"></div>
+      }
+    </app-card>
+    <app-card label="Pending" class="pending-card">
+      @if(pendingAccountsCount() !== null) {
+      <span class="count">{{ pendingAccountsCount() }}</span>
+      } @else {
+      <div class="no-value-bar"></div>
+      }
+    </app-card>
+    <app-card label="Approved" class="approved-card">
+      @if(approvedAccountsCount() !== null) {
+      <span class="count">{{ approvedAccountsCount() }}</span>
+      } @else {
+      <div class="no-value-bar"></div>
+      }
+    </app-card>
+  </div>
+</app-section>
+<app-section class="last-actions" title="Last Actions">
+  <ng-template appActionIcon>
+    <div class="search-wrapper">
+      <app-textfield
+        [(value)]="lastActionsSearchValue"
+        (valueChange)="onLastActionValueChange($event)"
+        label="Search"
+        placeholder="Search for any action..."
+      ></app-textfield>
+      @if(lastActionSearchLoading()) {
+      <mat-spinner></mat-spinner>
+      }
+    </div>
+  </ng-template>
+
+  @for(action of lastActions(); track action.id) {
+  <app-action-list-item [action]="action"></app-action-list-item>
+  }
+</app-section>
+<app-section class="pending-list" title="Pending List"></app-section>
+<app-section class="last-onboarded-companies" title="Last Onboarded Companies">
+  @for(company of lastOnboardedCompanies(); track company.id) {
+  <app-company-list-item [company]="company"></app-company-list-item>
+  }
+</app-section>
+} @else {
+<app-skeleton
+  class="total-corporate-users"
+  style="min-height: 70px"
+></app-skeleton>
+<app-skeleton class="total-bank-users" style="min-height: 70px"></app-skeleton>
+<app-skeleton
+  class="corporate-online-users"
+  style="min-height: 70px"
+></app-skeleton>
+<app-skeleton class="bank-online-users" style="min-height: 70px"></app-skeleton>
+<app-skeleton class="total-companies" style="min-height: 150px"></app-skeleton>
+<app-skeleton class="total-accounts" style="min-height: 150px"></app-skeleton>
+<app-skeleton class="last-actions" style="min-height: 280px"></app-skeleton>
+<app-skeleton class="pending-list" style="min-height: 280px"></app-skeleton>
+<app-skeleton
+  class="last-onboarded-companies"
+  style="min-height: 280px"
+></app-skeleton>
+}

@@ -1,0 +1,24 @@
+@if(authStore.authenticationReady()) {
+<div class="nav">
+  <button mat-icon-button class="sidebar-icon" (click)="showSidebar()">
+    <mat-icon>dehaze</mat-icon>
+  </button>
+  <img src="/assets/logos/emcrey.svg" class="logo" />
+  <div class="navigation">
+    <button routerLink="/dashboard" routerLinkActive="active">Dashboard</button>
+    <button routerLink="/users" routerLinkActive="active">Users</button>
+  </div>
+  <button mat-fab color="primary" routerLink="/profile" class="profile-button">
+    <mat-icon>person</mat-icon>
+  </button>
+</div>
+<div class="body">
+  <div>
+    <router-outlet></router-outlet>
+  </div>
+</div>
+}
+
+<nav class="sidebar">
+  
+</nav>

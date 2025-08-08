@@ -1,0 +1,56 @@
+@import "extendables"
+
+:host
+    width: 100%
+    height: 100%
+    display: flex
+    flex-direction: column
+    align-items: stretch
+    justify-content: center
+    --mat-form-field-container-height: 41px
+    --mat-form-field-container-vertical-padding: 9px
+    padding: 0 var(--screen-padding) 10px var(--screen-padding)
+
+.table-wrapper
+    position: relative
+    flex: 1
+    overflow: auto
+    border-top-left-radius: 10px
+
+.header
+    display: flex
+    flex-direction: row
+    align-items: center
+    margin-bottom: 10px
+    gap: 20px
+
+app-search-textfield
+    width: 300px
+
+:host ::ng-deep .mat-form-field-outline
+
+:host ::ng-deep tbody tr
+    height: 70px
+
+.title
+    flex: 1
+    @extend .screen-title
+
+.add-button
+    height: 42px
+    width: 42px
+
+.table-skeleton
+    display: flex
+    flex-direction: column
+    align-items: stretch
+    gap: 2px
+    flex: 1
+    overflow: hidden
+
+.text-column
+    min-width: 200px
+
+.date-column
+    min-width: 190px
+    width: 190px

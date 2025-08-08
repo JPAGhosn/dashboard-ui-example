@@ -1,0 +1,35 @@
+<form class="authbox" [formGroup]="form" (ngSubmit)="onSubmit()">
+  <img class="logo" src="assets/logos/emcrey.svg" height="50px" />
+  <app-textfield
+    label="Email"
+    placeholder="Enter your email..."
+    [errorMap]="{
+      required: 'Required',
+      email: 'Invalid email'
+    }"
+    formControlName="email"
+  ></app-textfield>
+  <app-textfield
+    label="Password"
+    placeholder="Enter your password..."
+    [errorMap]="{
+      required: 'Required',
+      passwordStrength: 'Password not strong enough'
+    }"
+    formControlName="password"
+  ></app-textfield>
+
+  <app-button
+    class="submit-button"
+    type="submit"
+    [class.is-loading]="isLoading()"
+  >
+    @if(isLoading()) {
+    <mat-spinner class="loader"></mat-spinner>
+    } @else {Sign In}
+  </app-button>
+
+  @if(errorMessage()) {
+  <span class="error">{{ errorMessage() }}</span>
+  }
+</form>

@@ -1,0 +1,50 @@
+
+@use '@angular/material' as mat
+@import "./styles/material-override"
+
+html, body
+    margin: 0
+    padding: 0
+    height: 100%
+    color: var(--on-surface)
+    background: #eeeeee
+
+*
+    box-sizing: border-box
+    font-family: sans-serif
+
+:root
+    --card-label-color: #b1b1b1
+    --card-background-color: #eee
+    --section-backgrond-color: white
+    --section-padding: 10px
+    --section-border-radius: 10px
+    --section-title-font-size: 12px
+    --on-surface: black
+    --screen-padding: 20px
+    --section-title-color: #b1b1b1
+    --section-title-font-weight: bold
+    --no-value-bar-color: #e5e5e5
+    --light-text-color: var(--card-label-color)
+    --skeleton-color: #e2e2e2
+    --primary: #fc5603
+    --on-primary: #fff
+    --error: red
+
+.screen-title
+    font-size: 20px
+
+*::-webkit-scrollbar
+    width: 11px
+
+*
+    scrollbar-width: 10px
+    scrollbar-color: map-get($m2-primary, 300) map-get($m2-primary, 50)
+
+*::-webkit-scrollbar-track
+    background: map-get($m2-primary, 50)
+
+*::-webkit-scrollbar-thumb
+    background-color: map-get($m2-primary, 300)
+    border-radius: 6px
+    border: 3px solid map-get($m2-primary, 50)

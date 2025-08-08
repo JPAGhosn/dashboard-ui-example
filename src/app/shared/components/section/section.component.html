@@ -1,0 +1,14 @@
+<div class="header">
+  @if(title()) {
+  <span class="title">{{ title() }}</span>
+  }
+
+  <!-- Right icon -->
+  @if(rightIconTemplate(); as rightIconTemplate) {
+  <div class="right-icon-wrapper">
+    <ng-container *ngTemplateOutlet="rightIconTemplate"></ng-container>
+  </div>
+  }
+</div>
+
+<ng-content></ng-content>

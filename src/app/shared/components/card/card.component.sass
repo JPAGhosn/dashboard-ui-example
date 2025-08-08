@@ -1,0 +1,26 @@
+:host
+    display: flex
+    flex-direction: column
+    align-items: stretch
+    gap: 20px
+    background-color: var(--card-background-color)
+    padding: 10px
+    border-radius: 5px
+    position: relative
+
+label
+    color: var(--card-label-color)
+    font-size: 12px
+    font-weight: bold
+
+.descriptive-icon
+    position: absolute
+    right: 10px
+    top: 10px
+
+:host ::ng-deep .descriptive-icon > *
+    width: 20px
+    height: 20px
+
+:host ::ng-deep .descriptive-icon svg
+    fill: var(--light-text-color)

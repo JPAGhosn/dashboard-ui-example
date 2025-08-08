@@ -1,0 +1,33 @@
+<form [formGroup]="upsertForm">
+  <span class="title">Create User</span>
+  <app-textfield
+    label="Full Name"
+    placeholder="Enter your fullname"
+    formControlName="fullName"
+    [errorMap]="{
+      required: 'Required'
+    }"
+  ></app-textfield>
+
+  <app-textfield
+    label="Email"
+    placeholder="Enter your email"
+    formControlName="email"
+    [errorMap]="{
+      required: 'Required',
+      email: 'Invalid email',
+    }"
+  ></app-textfield>
+
+  <app-textfield
+    label="Password"
+    placeholder="Enter a password"
+    formControlName="password"
+    [errorMap]="{
+      required: 'Required',
+      passwordStrength: 'Invalid passsword',
+    }"
+  ></app-textfield>
+
+  <app-button class="submit-button" type="submit">Create User</app-button>
+</form>

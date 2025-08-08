@@ -1,0 +1,10 @@
+<app-textfield
+  label="Search"
+  placeholder="Search..."
+  (valueChange)="onValueChange($event)"
+>
+</app-textfield>
+
+@if(loading()) {
+<mat-spinner></mat-spinner>
+}

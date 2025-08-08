@@ -1,0 +1,106 @@
+:host
+    display: grid
+    width: 100%
+    max-height: 100%
+    overflow-y: auto
+    gap: 20px
+    padding: var(--screen-padding)
+    grid-template-areas: "total-corporate-users total-corporate-users total-corporate-users total-bank-users total-bank-users total-bank-users corporate-online-users corporate-online-users corporate-online-users bank-online-users bank-online-users bank-online-users" "total-companies total-companies total-companies total-companies total-companies total-companies total-accounts total-accounts total-accounts total-accounts total-accounts total-accounts" "last-actions last-actions last-actions last-actions last-pending-list last-pending-list last-pending-list last-pending-list last-onboarded-companies last-onboarded-companies last-onboarded-companies last-onboarded-companies"
+    grid-template-rows: repeat(3, auto)
+    grid-template-columns: repeat(12, auto)
+    align-items: stretch
+    @media screen and (min-width: 0) and (max-width: 500px)
+        grid-template-columns: repeat(1, auto)
+        grid-template-areas: 'total-corporate-users' 'total-bank-users' 'total-bank-users' 'corporate-online-users' 'bank-online-users' 'total-companies' 'total-accounts' 'last-actions' 'last-pending-list' 'last-onboarded-companies'
+    @media screen and (min-width: 500px) and (max-width: 900px)
+        grid-template-columns: repeat(2, auto)
+        grid-template-areas: 'total-corporate-users total-bank-users' 'corporate-online-users bank-online-users' 'total-companies total-companies' 'total-accounts total-accounts' 'last-actions last-actions' 'last-pending-list last-pending-list' 'last-onboarded-companies last-onboarded-companies'
+
+app-section
+    height: 100%
+    min-height: 150px
+
+.total-corporate-users,
+.total-bank-users,
+.corporate-online-users,
+.bank-online-users
+    max-width: 100%
+
+.total-companies
+    grid-area: total-companies
+
+.total-corporate-users
+    grid-area: total-corporate-users
+    --icon-container-background-color: #c7ebf6
+
+.total-bank-users
+    grid-area: total-bank-users
+    --icon-container-background-color: #c7d0f6
+
+.corporate-online-users
+    grid-area: corporate-online-users
+    --icon-container-background-color: #f6c7ec
+
+.bank-online-users
+    grid-area: bank-online-users
+    --icon-container-background-color: #f2f6c7
+
+.total-accounts
+    grid-area: total-accounts
+
+.last-actions
+    grid-area: last-actions
+    display: flex
+    flex-direction: column
+    align-items: stretch
+
+.pending-list
+    grid-area: last-pending-list
+
+.last-onboarded-companies
+    grid-area: last-onboarded-companies
+
+.total-companies > div[body],
+.total-accounts > div[body]
+    display: flex
+    flex-direction: row
+    align-items: center
+    gap: 10px
+
+.total-companies app-card,
+.total-accounts app-card
+    flex: 1
+
+.total-card
+    background-color: #c7ebf6
+
+.pending-card
+    background-color: #f2f6c7
+
+.approved-card
+    background-color: #cbf6c7
+
+.no-value-bar
+    background-color: var(--no-value-bar-color)
+    height: 10px
+    max-width: 70px
+    border-radius: 4px
+
+.total-companies-action-icon,
+.total-accounts-action-icon
+    width: 16px
+    height: 16px
+    cursor: pointer
+
+mat-spinner
+    width: 13px !important
+    height: 13px !important
+    position: absolute
+    right: 5px
+
+.search-wrapper
+    display: flex
+    flex-direction: row
+    align-items: center
+    gap: 10px
+    position: relative

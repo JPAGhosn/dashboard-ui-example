@@ -1,0 +1,57 @@
+:host
+    height: 100%
+    width: 100%
+    display: flex
+    flex-direction: column
+    align-content: stretch
+
+.logo
+    max-height: 40px
+
+.nav
+    display: flex
+    flex-direction: row
+    align-items: center
+    justify-content: center
+    padding: 10px
+    overflow: hidden
+    padding: var(--screen-padding)
+
+.profile-button
+    margin-left: auto
+    width: 40px
+    height: 40px
+
+.body
+    flex-grow: 1
+    position: relative
+
+.body > div
+    position: absolute
+    inset: 0
+
+.nav > button.active
+    background-color: #0091ff
+
+.navigation
+    display: flex
+    flex-direction: row
+    align-items: stretch
+    margin-left: 30px
+    gap: 10px
+    @media screen and (min-width: 0) and (max-width: 500px)
+        display: none
+
+.navigation button
+    background-color: none
+    border: none
+
+.navigation button.active
+    font-weight: bold
+    color: var(--primary)
+
+.sidebar-icon
+    margin-right: 10px
+
+    @media screen and (min-width: 500px)
+        display: none

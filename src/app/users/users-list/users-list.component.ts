@@ -1,0 +1,222 @@
+import { Component, computed, DestroyRef, inject, signal } from '@angular/core';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { User } from '../../shared/models/user-model';
+import { UsersRemoteService } from '../../shared/remotes/users-remote.service';
+import { PaginationPayload } from '../../shared/payloads/pagination-payload';
+import {
+  catchError,
+  finalize,
+  map,
+  Subject,
+  switchMap,
+  takeUntil,
+  tap,
+  timer,
+} from 'rxjs';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { DatePipe } from '@angular/common';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { SearchTextfieldComponent } from '../../shared/components/search-textfield/search-textfield.component';
+import { LoaderService } from '../../shared/services/loader.service';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { SkeletonComponent } from '../../shared/components/skeleton/skeleton.component';
+import { MatSortModule, Sort, SortDirection } from '@angular/material/sort';
+
+@Component({
+  selector: 'app-users-list',
+  standalone: true,
+  imports: [
+    MatTableModule,
+    MatSortModule,
+    DatePipe,
+    MatPaginator,
+    SearchTextfieldComponent,
+    MatButtonModule,
+    MatIconModule,
+    RouterLink,
+    SkeletonComponent,
+  ],
+  templateUrl: './users-list.component.html',
+  styleUrl: './users-list.component.sass',
+  providers: [UsersRemoteService],
+})
+export class UsersListComponent {
+  private readonly usersRemote = inject(UsersRemoteService);
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly snackBar = inject(MatSnackBar);
+  private readonly loaderService = inject(LoaderService);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+
+  pageNumber = toSignal(
+    this.route.queryParamMap.pipe(
+      map((paramMap) => {
+        const pageNumberString = paramMap.get('pageNumber')!;
+        return Math.max(1, +pageNumberString);
+      })
+    )
+  );
+
+  filter = toSignal(
+    this.route.queryParamMap.pipe(
+      map((paramMap) => paramMap.get('filter') ?? '')
+    )
+  );
+
+  sortColumn = toSignal(
+    this.route.queryParamMap.pipe(
+      map((paramMap) => paramMap.get('sortColumn') ?? '')
+    )
+  );
+
+  sortDirection = toSignal(
+    this.route.queryParamMap.pipe(
+      map((paramMap) => {
+        const direction = paramMap.get('sortDirection');
+
+        if (direction && ['asc', 'desc', ''].includes(direction)) {
+          return direction as SortDirection;
+        }
+
+        return '';
+      })
+    )
+  );
+
+  public readonly dataSource = new MatTableDataSource<User>([]);
+
+  pagination = computed(() => {
+    return {
+      pageNumber: this.pageNumber() ?? 1,
+      pageSize: 15,
+      filter: this.filter() ?? '',
+      sort: {
+        active: this.sortColumn() ?? '',
+        direction: this.sortDirection() ?? '',
+      },
+    } satisfies PaginationPayload;
+  });
+
+  totalRecords = signal(0);
+
+  displayedColumns = ['fullName', 'email', 'lastLogin', 'edit-icon'];
+
+  isSearchLoading = signal(false);
+  isDataLoading = signal(true);
+  search$ = new Subject<void>();
+
+  dummyArray = signal(Array.from(Array(30).keys()));
+
+  constructor() {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        pageNumber: this.pageNumber(),
+        filter: this.route.snapshot.paramMap.get('filter') ?? '',
+        sortColumn: this.sortColumn(),
+        sortDirection: this.sortDirection(),
+      },
+      queryParamsHandling: 'merge',
+    });
+
+    this.getUsers()
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        catchError((err) => {
+          this.snackBar.open('Error while trying to fetch the users');
+          throw err;
+        }),
+        finalize(() => this.isDataLoading.set(false))
+      )
+      .subscribe();
+  }
+
+  getUsers() {
+    return this.usersRemote.getUsers(this.pagination()).pipe(
+      tap((response) => {
+        this.dataSource.data = response.data;
+        this.totalRecords.set(response.totalRecords);
+      })
+    );
+  }
+
+  async onSearchChange($event: string) {
+    this.search$.next();
+    this.isSearchLoading.set(true);
+
+    await this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { filter: $event, pageNumber: 1 },
+      queryParamsHandling: 'merge',
+    });
+
+    timer(300)
+      .pipe(
+        switchMap((_) => {
+          return this.getUsers().pipe();
+        }),
+        takeUntilDestroyed(this.destroyRef),
+        takeUntil(this.search$),
+        catchError((err) => {
+          this.snackBar.open('Error while trying to fetch the users');
+          throw err;
+        }),
+        finalize(() => this.isSearchLoading.set(false))
+      )
+      .subscribe();
+  }
+
+  async onPageChange($event: PageEvent) {
+    await this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { pageNumber: $event.pageIndex + 1 },
+      queryParamsHandling: 'merge',
+    });
+
+    // const loadingId = this.loaderService.addLoading();
+    this.isDataLoading.set(true);
+    return this.getUsers()
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        catchError((err) => {
+          this.snackBar.open('Error while trying to fetch the users');
+          throw err;
+        }),
+        finalize(() => this.isDataLoading.set(false))
+        // finalize(() => this.loaderService.removeLoading(loadingId))
+      )
+      .subscribe();
+  }
+
+  onDelete(userId: any) {
+    throw new Error('Method not implemented.');
+  }
+
+  async onSort($event: Sort) {
+    const loadingId = this.loaderService.addLoading();
+
+    await this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        pageNumber: 1,
+        sortColumn: $event.active,
+        sortDirection: $event.direction,
+      },
+      queryParamsHandling: 'merge',
+    });
+
+    this.getUsers()
+      .pipe(
+        catchError((err) => {
+          this.snackBar.open(err);
+          throw err;
+        }),
+        finalize(() => this.loaderService.removeLoading(loadingId)),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe();
+  }
+}

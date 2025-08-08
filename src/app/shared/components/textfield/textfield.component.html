@@ -1,0 +1,14 @@
+<mat-form-field class="mat-form-field" [class.has-error]="errorMessage !== ''">
+  <mat-label>{{ label() }}</mat-label>
+
+  <input
+    matInput
+    [placeholder]="placeholder()"
+    [formControl]="control"
+    (input)="onInput($event)"
+  />
+
+  @if (errorMessage) {
+  <mat-error>{{ errorMessage }}</mat-error>
+  }
+</mat-form-field>

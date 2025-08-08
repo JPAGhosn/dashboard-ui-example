@@ -1,0 +1,9 @@
+<label class="label">{{ label() }}</label>
+
+<ng-content></ng-content>
+
+@if(descriptiveIconTemplate(); as descriptiveIconTemplate) {
+<div class="descriptive-icon">
+  <ng-container *ngTemplateOutlet="descriptiveIconTemplate"></ng-container>
+</div>
+}
