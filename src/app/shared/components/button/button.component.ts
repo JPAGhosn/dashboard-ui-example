@@ -10,4 +10,5 @@ import { MatButtonModule } from '@angular/material/button';
 })
 export class ButtonComponent {
   type = input('button');
+  disabled = input(false);
 }

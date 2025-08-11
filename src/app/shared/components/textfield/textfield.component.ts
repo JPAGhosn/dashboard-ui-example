@@ -26,6 +26,7 @@ export class TextfieldComponent implements ControlValueAccessor {
   label = input.required<string>();
   placeholder = input.required<string>();
   errorMap = input<Record<string, string>>({});
+  type = input<'email' | 'password' | 'text'>('text');
 
   onChange = (v: string) => {};
   onTouched = () => {};

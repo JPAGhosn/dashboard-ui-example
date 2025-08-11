@@ -146,7 +146,11 @@ export class UsersListComponent {
         }),
         finalize(() => this.isDataLoading.set(false))
       )
-      .subscribe();
+      .subscribe({
+        complete: () => {
+          console.log('Completed');
+        },
+      });
   }
 
   getUsers() {

@@ -6,7 +6,7 @@ import { User } from '../models/user-model';
 import { paginateAndFilter } from '../dev-only';
 import { UserCreatePayload } from '../payloads/user-create-payload';
 
-const DATA: User[] = [
+let DATA: User[] = [
   {
     id: 'afa19142-a234-4a9e-81c5-e746671e7b10',
     fullName: 'Jean Paul Abi Ghosn',
@@ -236,6 +236,7 @@ export class UsersRemoteService {
   }
 
   deleteUserById(userId: any) {
+    DATA = DATA.filter((u) => u.id !== userId);
     return timer(200).pipe(map((_) => ({ deleted: true })));
   }
 }

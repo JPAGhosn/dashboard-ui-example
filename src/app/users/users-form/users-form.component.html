@@ -22,6 +22,7 @@
     }"
   ></app-textfield>
 
+  @if(mode() === 'create') {
   <app-textfield
     label="Password"
     placeholder="Enter a password"
@@ -31,6 +32,7 @@
       passwordStrength: 'Invalid passsword',
     }"
   ></app-textfield>
+  }
 
   <div class="header">
     <span class="sub-title">Roles</span>
@@ -57,7 +59,10 @@
     }
   </ng-container>
 
-  <app-button class="submit-button" type="submit">{{
-    submitText()
-  }}</app-button>
+  <app-button
+    class="submit-button"
+    type="submit"
+    [disabled]="isSubmitButtonDisabled()"
+    >{{ submitText() }}</app-button
+  >
 </form>

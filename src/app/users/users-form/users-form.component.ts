@@ -60,7 +60,7 @@ export class UsersFormComponent implements OnInit {
     this.route.paramMap.pipe(map((paramMap) => paramMap.get('userId')))
   );
 
-  private readonly mode = computed(() => {
+  public readonly mode = computed(() => {
     const userId = this.userId();
     if (userId) {
       return 'edit';
@@ -84,6 +84,14 @@ export class UsersFormComponent implements OnInit {
     password: ['', [Validators.required, passwordValidator()]],
     roles: this.fb.array([this.fb.control('', [Validators.required])]),
   });
+
+  public readonly isSubmitButtonDisabled = computed(() => {
+    return (this.formValue() && this.upsertForm.invalid) ?? true;
+  });
+
+  public readonly formValue = toSignal(
+    this.upsertForm.controls.roles.valueChanges
+  );
 
   public readonly roles = toSignal<unknown[]>(
     this.upsertForm.controls.roles.valueChanges.pipe(

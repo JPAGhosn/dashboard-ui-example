@@ -76,7 +76,7 @@ export class AppComponent {
     this.router.events
       .pipe(
         tap((event) => {
-          console.log(event);
+          // console.log(event);
 
           if (event instanceof NavigationStart) {
             this.loaderService.addNavigationLoading();

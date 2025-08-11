@@ -22,4 +22,4 @@ export class ProfileScreenComponent {
     this.cookiesService.removeCookie("refreshToken")
     this.router.navigateByUrl('/login');
   }
-}
+} 
