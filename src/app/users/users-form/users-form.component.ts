@@ -4,6 +4,7 @@ import {
   DestroyRef,
   effect,
   inject,
+  OnInit,
   Signal,
   untracked,
 } from '@angular/core';
@@ -46,7 +47,7 @@ import { LoaderService } from '../../shared/services/loader.service';
   styleUrl: './users-form.component.sass',
   providers: [UsersRemoteService],
 })
-export class UsersFormComponent {
+export class UsersFormComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly usersRemote = inject(UsersRemoteService);
   private readonly route = inject(ActivatedRoute);
@@ -93,12 +94,6 @@ export class UsersFormComponent {
   );
 
   constructor() {
-    this.upsertForm.valueChanges.pipe(
-      tap((v) => {
-        console.log(v);
-      })
-    );
-
     effect(() => {
       const userId = this.userId();
 
@@ -120,10 +115,23 @@ export class UsersFormComponent {
               finalize(() => this.loader.removeLoading(loadingId))
             )
             .subscribe();
+        } else {
+          this.upsertForm.patchValue({
+            fullName: '',
+            email: '',
+            password: '',
+          });
+
+          this.upsertForm.controls.roles.setControl(
+            0,
+            this.fb.control('', [Validators.required])
+          );
         }
       });
     });
   }
+
+  ngOnInit(): void {}
 
   onSubmit() {
     if (this.upsertForm.invalid) {
