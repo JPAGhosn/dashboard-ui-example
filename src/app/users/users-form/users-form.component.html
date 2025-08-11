@@ -50,6 +50,9 @@
       label="Role"
       placeholder="Enter the role name..."
       [formControlName]="$index"
+      [errorMap]="{
+        required: 'Required'
+      }"
     ></app-textfield>
     }
   </ng-container>

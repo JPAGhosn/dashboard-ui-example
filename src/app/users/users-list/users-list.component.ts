@@ -207,7 +207,9 @@ export class UsersListComponent {
   onDelete(userId: any) {
     this.dialog
       .open(DialogComponent, {
-        width: '250px',
+        width: '100vw',
+        minWidth: '300px',
+        maxWidth: '500px',
         data: {
           title: 'Confirm Deletion',
           message: 'Are you sure you want to delete this user?',
