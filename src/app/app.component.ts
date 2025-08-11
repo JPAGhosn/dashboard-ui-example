@@ -2,6 +2,8 @@ import { Component, DestroyRef, effect, inject } from '@angular/core';
 import {
   ActivationEnd,
   ActivationStart,
+  NavigationEnd,
+  NavigationStart,
   Router,
   RouterLink,
   RouterLinkActive,
@@ -71,13 +73,12 @@ export class AppComponent {
     this.router.events
       .pipe(
         tap((event) => {
-          if (event instanceof ActivationStart) {
-            this.navigationLoadingId = this.loaderService.addLoading();
-          } else if (
-            event instanceof ActivationEnd &&
-            this.navigationLoadingId
-          ) {
-            this.loaderService.removeLoading(this.navigationLoadingId);
+          console.log(event);
+
+          if (event instanceof NavigationStart) {
+            this.loaderService.addNavigationLoading();
+          } else if (event instanceof NavigationEnd) {
+            this.loaderService.removeNavigationLoading();
           }
         })
       )

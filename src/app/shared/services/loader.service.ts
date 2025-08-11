@@ -1,12 +1,15 @@
 import { computed, Injectable, signal } from '@angular/core';
-import { finalize } from 'rxjs';
+import { finalize, MonoTypeOperatorFunction, Observable } from 'rxjs';
 import { v4 } from 'uuid';
 
 @Injectable()
 export class LoaderService {
   loadingIds = signal<string[]>([]);
+  navigationLoading = signal(false);
 
-  isLoading = computed(() => this.loadingIds().length > 0);
+  isLoading = computed(() => {
+    return this.navigationLoading() || this.loadingIds().length > 0;
+  });
 
   constructor() {}
 
@@ -21,13 +24,22 @@ export class LoaderService {
 
   removeLoading(id: string) {
     this.loadingIds.update((curr) => {
-      const index = curr.findIndex((loadingId) => loadingId !== id);
-      curr.splice(index, 1);
-      return [...curr];
+      const filtered = curr.filter((loadingId) => loadingId !== id);
+      return [...filtered];
     });
   }
 
-  removeLoadingOnFinalize(loadingId: string) {
-    return finalize(() => this.removeLoading(loadingId));
+  removeLoadingOnFinalize<T>(loadingId: string): MonoTypeOperatorFunction<T> {
+    return finalize(() => {
+      return this.removeLoading(loadingId);
+    });
+  }
+
+  removeNavigationLoading() {
+    this.navigationLoading.set(false);
+  }
+
+  addNavigationLoading() {
+    this.navigationLoading.set(true);
   }
 }

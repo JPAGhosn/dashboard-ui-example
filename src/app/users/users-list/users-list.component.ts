@@ -182,7 +182,6 @@ export class UsersListComponent {
       queryParamsHandling: 'merge',
     });
 
-    // const loadingId = this.loaderService.addLoading();
     this.isDataLoading.set(true);
     return this.getUsers()
       .pipe(
@@ -211,7 +210,7 @@ export class UsersListComponent {
           this.snackBar.open(err, 'close');
           throw err;
         }),
-        this.loaderService.removeLoadingOnFinalize(loaderId),
+        finalize(() => this.loaderService.removeLoading(loaderId)),
         takeUntilDestroyed(this.destroyRef)
       )
       .subscribe();
@@ -230,13 +229,16 @@ export class UsersListComponent {
       queryParamsHandling: 'merge',
     });
 
+    this.search$.next();
+
     this.getUsers()
       .pipe(
         catchError((err) => {
           this.snackBar.open(err, 'close');
           throw err;
         }),
-        this.loaderService.removeLoadingOnFinalize(loadingId),
+        finalize(() => this.loaderService.removeLoading(loadingId)),
+        takeUntil(this.search$),
         takeUntilDestroyed(this.destroyRef)
       )
       .subscribe();

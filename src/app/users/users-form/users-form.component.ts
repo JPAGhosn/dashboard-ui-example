@@ -117,7 +117,7 @@ export class UsersFormComponent {
 
                 this.upsertForm.controls.roles.setValue(user.roles);
               }),
-              this.loader.removeLoadingOnFinalize(loadingId)
+              finalize(() => this.loader.removeLoading(loadingId))
             )
             .subscribe();
         }
@@ -160,7 +160,7 @@ export class UsersFormComponent {
           this.snackbar.open(err, 'close');
           throw err;
         }),
-        this.loader.removeLoadingOnFinalize(loadingId),
+        finalize(() => this.loader.removeLoading(loadingId)),
         takeUntilDestroyed(this.destroyRef)
       )
       .subscribe();
