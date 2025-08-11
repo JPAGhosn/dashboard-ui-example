@@ -1,4 +1,5 @@
 import { computed, Injectable, signal } from '@angular/core';
+import { finalize } from 'rxjs';
 import { v4 } from 'uuid';
 
 @Injectable()
@@ -24,5 +25,9 @@ export class LoaderService {
       curr.splice(index, 1);
       return [...curr];
     });
+  }
+
+  removeLoadingOnFinalize(loadingId: string) {
+    return finalize(() => this.removeLoading(loadingId));
   }
 }

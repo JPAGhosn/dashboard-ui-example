@@ -19,7 +19,7 @@ export class AuthenticationRemoteService {
       map((_) => {
         return {
           accessToken:
-            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJlM2Y3MGIwNS0zYjE1LTRjNDYtOGM2Zi0xNzIyYmJiMmUzYmQiLCJpYXQiOjE3NTQ2Mjc4MDMsImV4cCI6MTc1OTg5ODIwM30.cXfeV3ANlrur2Lzqr8Os9-o4xvCiCXOqJnqfNMmwiGs',
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3NTQ2NTE5NzIsImV4cCI6MTc1NzMxOTU3MSwiZnVsbE5hbWUiOiJKZWFuIFBhdWwgQWJpIEdob3NuIn0.NyvamKc8qrOfJ_NKtgR6epCG6gHD1P5tMH2fjZzbobQ',
           refreshToken:
             'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJlM2Y3MGIwNS0zYjE1LTRjNDYtOGM2Zi0xNzIyYmJiMmUzYmQiLCJpYXQiOjE3NTQ2Mjc4MDMsImV4cCI6MTc1OTg5ODIwM30.cXfeV3ANlrur2Lzqr8Os9-o4xvCiCXOqJnqfNMmwiGs',
         } satisfies LoginResponse;

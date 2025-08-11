@@ -8,6 +8,8 @@ export function passwordValidator(): ValidatorFn {
       return null;
     }
 
+    if (value === '********') return null;
+
     const hasUpperCase = /[A-Z]+/.test(value);
 
     const hasLowerCase = /[a-z]+/.test(value);

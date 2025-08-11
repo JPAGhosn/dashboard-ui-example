@@ -8,7 +8,7 @@
     (input)="onInput($event)"
   />
 
-  @if (errorMessage) {
+  @if (errorMessage !== '') {
   <mat-error>{{ errorMessage }}</mat-error>
   }
 </mat-form-field>

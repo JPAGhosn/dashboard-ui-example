@@ -37,6 +37,13 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'profile',
+        loadComponent: () =>
+          import('./profile-screen/profile-screen.component').then(
+            (m) => m.ProfileScreenComponent
+          ),
+      },
+      {
         path: 'users',
         children: [
           {

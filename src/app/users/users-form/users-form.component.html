@@ -1,5 +1,8 @@
-<form [formGroup]="upsertForm">
+<form [formGroup]="upsertForm" (ngSubmit)="onSubmit()">
   <span class="title">Create User</span>
+
+  <span class="sub-title">General Information</span>
+
   <app-textfield
     label="Full Name"
     placeholder="Enter your fullname"
@@ -29,5 +32,29 @@
     }"
   ></app-textfield>
 
-  <app-button class="submit-button" type="submit">Create User</app-button>
+  <div class="header">
+    <span class="sub-title">Roles</span>
+    <button
+      mat-fab
+      color="primary"
+      (click)="onAddRoleClicked()"
+      class="add-button"
+      type="button"
+    >
+      <mat-icon>add</mat-icon>
+    </button>
+  </div>
+  <ng-container formArrayName="roles">
+    @for(role of roles(); track role) {
+    <app-textfield
+      label="Role"
+      placeholder="Enter the role name..."
+      [formControlName]="$index"
+    ></app-textfield>
+    }
+  </ng-container>
+
+  <app-button class="submit-button" type="submit">{{
+    submitText()
+  }}</app-button>
 </form>

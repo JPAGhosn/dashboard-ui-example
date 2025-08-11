@@ -15,8 +15,13 @@ import { CookiesHelperService } from './cookies-helper.service';
 
 @Injectable()
 export class AuthenticationStoreService {
-
   credentials = signal<Credentials | null>(null);
+
+  fullName = computed(() => {
+    const accessToken = this.credentials()?.accessToken;
+    if (!accessToken) return null;
+    return (jwtDecode(accessToken) as any)['fullName'];
+  });
 
   // Prevent the app to load unless the verification has been done
   authenticationReady = signal(false);

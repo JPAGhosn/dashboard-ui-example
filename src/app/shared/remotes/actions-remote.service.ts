@@ -14,6 +14,7 @@ const DATA: Action[] = [
       fullName: 'Rawad Richa',
       email: 'someEmail@emcrey.com',
       lastLogin: new Date().toString() as any,
+      roles: [],
     },
   },
   {
@@ -25,6 +26,7 @@ const DATA: Action[] = [
       fullName: 'Rawad Richa',
       email: 'someEmail@emcrey.com',
       lastLogin: new Date().toString() as any,
+      roles: [],
     },
   },
   {
@@ -36,6 +38,7 @@ const DATA: Action[] = [
       fullName: 'Rawad Richa',
       email: 'someEmail@emcrey.com',
       lastLogin: new Date().toString() as any,
+      roles: [],
     },
   },
 ];

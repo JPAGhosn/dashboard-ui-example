@@ -55,3 +55,37 @@
 
     @media screen and (min-width: 500px)
         display: none
+
+.sidebar
+    position: absolute
+    transition: left 200ms
+    inset: 0 auto 0 -80%
+    width: 80%
+    height: 100%
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px
+    background-color: var(--surface)
+    z-index: 1000
+
+.logo-mobile
+    margin-bottom: 20px
+    margin-top: 20px
+    margin-left: 20px
+
+.sidebar.opened
+    left: 0
+
+.sidebar-item
+    height: 50px
+    display: flex
+    flex-direction: row
+    align-items: center
+    padding: 0 20px
+
+.navigation-mobile
+    display: flex
+    flex-direction: column
+    align-items: stretch
+
+.navigation-mobile .active
+    background-color: var(--primary)
+    color: var(--on-primary)

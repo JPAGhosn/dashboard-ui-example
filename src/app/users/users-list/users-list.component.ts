@@ -102,7 +102,13 @@ export class UsersListComponent {
 
   totalRecords = signal(0);
 
-  displayedColumns = ['fullName', 'email', 'lastLogin', 'edit-icon'];
+  displayedColumns = [
+    'fullName',
+    'email',
+    'lastLogin',
+    'edit-icon',
+    'delete-icon',
+  ];
 
   isSearchLoading = signal(false);
   isDataLoading = signal(true);
@@ -126,7 +132,7 @@ export class UsersListComponent {
       .pipe(
         takeUntilDestroyed(this.destroyRef),
         catchError((err) => {
-          this.snackBar.open('Error while trying to fetch the users');
+          this.snackBar.open('Error while trying to fetch the users', 'close');
           throw err;
         }),
         finalize(() => this.isDataLoading.set(false))
@@ -161,7 +167,7 @@ export class UsersListComponent {
         takeUntilDestroyed(this.destroyRef),
         takeUntil(this.search$),
         catchError((err) => {
-          this.snackBar.open('Error while trying to fetch the users');
+          this.snackBar.open('Error while trying to fetch the users', 'close');
           throw err;
         }),
         finalize(() => this.isSearchLoading.set(false))
@@ -182,17 +188,33 @@ export class UsersListComponent {
       .pipe(
         takeUntilDestroyed(this.destroyRef),
         catchError((err) => {
-          this.snackBar.open('Error while trying to fetch the users');
+          this.snackBar.open('Error while trying to fetch the users', 'close');
           throw err;
         }),
         finalize(() => this.isDataLoading.set(false))
-        // finalize(() => this.loaderService.removeLoading(loadingId))
       )
       .subscribe();
   }
 
   onDelete(userId: any) {
-    throw new Error('Method not implemented.');
+    const loaderId = this.loaderService.addLoading();
+    this.usersRemote
+      .deleteUserById(userId)
+      .pipe(
+        tap((response) => {
+          this.snackBar.open('User deleted successfully', 'close');
+        }),
+        switchMap(() => {
+          return this.getUsers();
+        }),
+        catchError((err) => {
+          this.snackBar.open(err, 'close');
+          throw err;
+        }),
+        this.loaderService.removeLoadingOnFinalize(loaderId),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe();
   }
 
   async onSort($event: Sort) {
@@ -211,10 +233,10 @@ export class UsersListComponent {
     this.getUsers()
       .pipe(
         catchError((err) => {
-          this.snackBar.open(err);
+          this.snackBar.open(err, 'close');
           throw err;
         }),
-        finalize(() => this.loaderService.removeLoading(loadingId)),
+        this.loaderService.removeLoadingOnFinalize(loadingId),
         takeUntilDestroyed(this.destroyRef)
       )
       .subscribe();

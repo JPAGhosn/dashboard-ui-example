@@ -1,5 +1,12 @@
 import { Component, DestroyRef, effect, inject } from '@angular/core';
-import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import {
+  ActivationEnd,
+  ActivationStart,
+  Router,
+  RouterLink,
+  RouterLinkActive,
+  RouterOutlet,
+} from '@angular/router';
 import { LoaderCurtainComponent } from './shared/components/loader-curtain/loader-curtain.component';
 import { AuthenticationStoreService } from './shared/services/authentication-store.service';
 import {
@@ -32,7 +39,9 @@ export class AppComponent {
   private readonly authRemote = inject(AuthenticationRemoteService);
   private readonly destroyRef = inject(DestroyRef);
   private readonly cookiesHelper = inject(CookiesHelperService);
-  private readonly authStore = inject(AuthenticationStoreService);
+  public readonly authStore = inject(AuthenticationStoreService);
+  private readonly router = inject(Router);
+  navigationLoadingId: string | null = null;
 
   constructor() {
     const loadingId = this.loaderService.addLoading();
@@ -55,6 +64,22 @@ export class AppComponent {
           this.authStore.authenticationReady.set(true);
         }),
         takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe();
+
+    // Show loader when switching routes
+    this.router.events
+      .pipe(
+        tap((event) => {
+          if (event instanceof ActivationStart) {
+            this.navigationLoadingId = this.loaderService.addLoading();
+          } else if (
+            event instanceof ActivationEnd &&
+            this.navigationLoadingId
+          ) {
+            this.loaderService.removeLoading(this.navigationLoadingId);
+          }
+        })
       )
       .subscribe();
   }

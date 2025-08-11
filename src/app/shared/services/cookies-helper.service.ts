@@ -17,4 +17,8 @@ export class CookiesHelperService {
     );
     return match ? decodeURIComponent(match[2]) : null;
   }
+
+  removeCookie(name: string) {
+    document.cookie = `${name}=; Max-Age=0; path=/`;
+  }
 }

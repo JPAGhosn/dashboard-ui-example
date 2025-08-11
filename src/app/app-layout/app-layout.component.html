@@ -1,6 +1,10 @@
 @if(authStore.authenticationReady()) {
 <div class="nav">
-  <button mat-icon-button class="sidebar-icon" (click)="showSidebar()">
+  <button
+    mat-icon-button
+    class="sidebar-icon"
+    (click)="isSidebarOpened.set(true); $event.stopPropagation()"
+  >
     <mat-icon>dehaze</mat-icon>
   </button>
   <img src="/assets/logos/emcrey.svg" class="logo" />
@@ -19,6 +23,29 @@
 </div>
 }
 
-<nav class="sidebar">
-  
+<nav
+  class="sidebar"
+  [ngClass]="isSidebarOpened() ? 'opened' : 'closed'"
+  (click)="$event.stopPropagation()"
+>
+  <img class="logo-mobile" src="/assets/logos/emcrey.svg" height="40" />
+
+  <div class="navigation-mobile">
+    <div
+      class="sidebar-item"
+      routerLink="/dashboard"
+      routerLinkActive="active"
+      (click)="closeSidebar()"
+    >
+      Dashboard
+    </div>
+    <div
+      class="sidebar-item"
+      routerLink="/users"
+      routerLinkActive="active"
+      (click)="closeSidebar()"
+    >
+      Users
+    </div>
+  </div>
 </nav>
