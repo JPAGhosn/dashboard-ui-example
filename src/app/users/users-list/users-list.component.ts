@@ -5,8 +5,10 @@ import { UsersRemoteService } from '../../shared/remotes/users-remote.service';
 import { PaginationPayload } from '../../shared/payloads/pagination-payload';
 import {
   catchError,
+  EMPTY,
   finalize,
   map,
+  of,
   Subject,
   switchMap,
   takeUntil,
@@ -24,6 +26,12 @@ import { MatButtonModule } from '@angular/material/button';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { SkeletonComponent } from '../../shared/components/skeleton/skeleton.component';
 import { MatSortModule, Sort, SortDirection } from '@angular/material/sort';
+import { MatDialog } from '@angular/material/dialog';
+import {
+  DialogComponent,
+  DialogDataModel,
+  DialogResponseModel,
+} from '../../shared/components/dialog/dialog.component';
 
 @Component({
   selector: 'app-users-list',
@@ -50,6 +58,7 @@ export class UsersListComponent {
   private readonly loaderService = inject(LoaderService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
+  private readonly dialog = inject(MatDialog);
 
   pageNumber = toSignal(
     this.route.queryParamMap.pipe(
@@ -196,21 +205,36 @@ export class UsersListComponent {
   }
 
   onDelete(userId: any) {
-    const loaderId = this.loaderService.addLoading();
-    this.usersRemote
-      .deleteUserById(userId)
+    this.dialog
+      .open(DialogComponent, {
+        width: '250px',
+        data: {
+          title: 'Confirm Deletion',
+          message: 'Are you sure you want to delete this user?',
+        } satisfies DialogDataModel,
+      })
+      .afterClosed()
       .pipe(
-        tap((response) => {
-          this.snackBar.open('User deleted successfully', 'close');
-        }),
-        switchMap(() => {
-          return this.getUsers();
+        switchMap((response: DialogResponseModel) => {
+          if (response === 'no') {
+            return EMPTY;
+          }
+
+          const loaderId = this.loaderService.addLoading();
+          return this.usersRemote.deleteUserById(userId).pipe(
+            tap((response) => {
+              this.snackBar.open('User deleted successfully', 'close');
+            }),
+            switchMap(() => {
+              return this.getUsers();
+            }),
+            finalize(() => this.loaderService.removeLoading(loaderId))
+          );
         }),
         catchError((err) => {
           this.snackBar.open(err, 'close');
           throw err;
         }),
-        finalize(() => this.loaderService.removeLoading(loaderId)),
         takeUntilDestroyed(this.destroyRef)
       )
       .subscribe();

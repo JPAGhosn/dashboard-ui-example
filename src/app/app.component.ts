@@ -2,7 +2,10 @@ import { Component, DestroyRef, effect, inject } from '@angular/core';
 import {
   ActivationEnd,
   ActivationStart,
+  ChildActivationEnd,
+  NavigationCancel,
   NavigationEnd,
+  NavigationError,
   NavigationStart,
   Router,
   RouterLink,
@@ -77,7 +80,11 @@ export class AppComponent {
 
           if (event instanceof NavigationStart) {
             this.loaderService.addNavigationLoading();
-          } else if (event instanceof NavigationEnd) {
+          } else if (
+            event instanceof NavigationEnd ||
+            event instanceof NavigationCancel ||
+            event instanceof NavigationError
+          ) {
             this.loaderService.removeNavigationLoading();
           }
         })
