@@ -47,7 +47,7 @@
     </button>
   </div>
   <ng-container formArrayName="roles">
-    @for(role of roles(); track role) {
+    @for(role of roles(); track $index) {
     <app-textfield
       label="Role"
       placeholder="Enter the role name..."
